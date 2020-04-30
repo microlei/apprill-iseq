@@ -1,0 +1,34 @@
+# Global configurations
+# This file contains all the parameters needed to update the workflow
+
+# the name for the analysis
+analysisname: "test"
+
+# the path to the data
+path: "/vortexfs1/scratch/lma/test"
+
+# file containing the sample names and paths for R1 and R2
+sampletable: "sampletable.csv"
+
+# parameters for dada2::filterAndTrim
+
+trimLeft: 20
+truncLen: 125
+maxN: 0
+maxEE: 1
+multithread: TRUE
+
+# parameters for dada2::learnErrors
+# the default number of bases is 1e+08, but that seems to cover only 1 sample
+# so I changed it to 1e+09 to see how that goes
+nbases: 1e+09
+
+# parameters for dada2.removeBimeraDenovo (unused, need to update)
+
+method: "consensus"
+
+# parameters for dada2::assignTaxonomy and dada2:addSpecies
+
+taxadb: "/vortexfs1/home/lma/silvadbs/138/silva_nr_v138_train_set.fa.gz"
+speciesdb: "/vortexfs1/home/lma/silvadbs/138/silva_species_assignment_v138.fa.gz"
+minBoot: 50
