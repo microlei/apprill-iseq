@@ -4,17 +4,18 @@
 sink(snakemake@log[[1]])
 cat("Beginning output of tracking reads \n")
 
-load(file=snakemake@input[['outF']])
+outF <- readRDS(file=snakemake@input[['outF']])
 cat("outF: \n")
 head(outF)
 dadaFs <- readRDS(file=snakemake@input[['dadaFs']])
 cat("dadaFs: \n")
 head(dadaFs)
-load(file=snakemake@input[['seqtab_nochim']]) #note this object is names seqtab.nochim
+seqtab.nochim <- readRDS(file=snakemake@input[['seqtab_nochim']])
 cat("seqtab.nochim\n")
 head(seqtab.nochim)
 
 getN <- function(x) sum(getUniques(x))
+#need to use leftjoin from tidyverse here in case samples got dropped
 track <- cbind(outF, sapply(dadaFs, getN), rowSums(seqtab.nochim))
 colnames(track) <- c("raw", "filtered", "denoised", "nochim")
 rownames(track) <- snakemake@params[['samples']]

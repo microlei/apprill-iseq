@@ -8,12 +8,11 @@ library(dada2)
 
 seqtab <- readRDS(file=snakemake@input[['seqtab']])
 
-#may want to move the method to the config file
-seqtab.nochim <- removeBimeraDenovo(seqtab, method="consensus", multithread=TRUE, verbose=TRUE)
+seqtab.nochim <- removeBimeraDenovo(seqtab, method=snakemake@config[['method']], multithread=TRUE, verbose=TRUE)
 
 cat("Dimensions after removing chimeras: \n")
 dim(seqtab.nochim)
 cat("Proportion of original: \n")
 sum(seqtab.nochim)/sum(seqtab)
 
-save(seqtab.nochim, file=snakemake@output[['seqtab']])
+saveRDS(seqtab.nochim, file=snakemake@output[['seqtab']])

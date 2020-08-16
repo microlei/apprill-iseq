@@ -14,7 +14,6 @@ library(ggplot2)
 errF <- learnErrors(snakemake@input[['R1']],  multithread=TRUE, randomize=TRUE, verbose=2)
 
 
-save(errF, file=snakemake@output[['errR1']])
-#save(errR, file=snakemake@output[['errR2']])
+saveRDS(errF, file=snakemake@output[['errR1']])
 plotErrors(errF, nominalQ=TRUE)
 ggsave(snakemake@output[['plotErrR1']])

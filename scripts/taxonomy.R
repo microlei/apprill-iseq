@@ -6,7 +6,7 @@ sink(snakemake@log[[1]])
 cat("Beginning output of taxonomy assignment \n")
 library(dada2)
 
-load(file=snakemake@input[['seqtab']]) #note this loads seqtab.nochim
+seqtab.nochim <- readRDS(file=snakemake@input[['seqtab']])
 
 cat("Assigning taxonomy\n")
 taxa <- assignTaxonomy(seqtab.nochim, snakemake@config[['taxadb']], multithread=TRUE, minBoot = snakemake@config[['minBoot']])

@@ -21,4 +21,4 @@ outF <- filterAndTrim(fwd = snakemake@input[['R1']], filt = snakemake@output[['R
 row.names(outF) <- snakemake@params[['samples']]
 print(outF)
 
-save(outF, file=snakemake@output[['filtered']])		
+saveRDS(outF, file=snakemake@output[['filtered']])		

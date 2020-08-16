@@ -27,12 +27,14 @@ rule all:
 		"output/taxonomy.txt",
 		"output/ASVseqs.txt"
 
+#clears all outputs (except for plotted quality profiles)
 rule clean:
     shell:
         '''
         rm output/*.rds
         rm output/*.txt
         rm output/*.csv
+	rm logs/*
         '''
 
 #plots quality profiles

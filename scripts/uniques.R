@@ -7,9 +7,9 @@ library(dada2)
 cat("Beginning output for getting uniques \n")
 
 # errR1 is an .rds file so it must be loaded first
-load(file=snakemake@input[['errR1']])
+errR1 <- readRDS(file=snakemake@input[['errR1']])
 
-dadaFs <- dada(snakemake@input[['R1']], errF, multithread=TRUE)
+dadaFs <- dada(snakemake@input[['R1']], errR1, multithread=TRUE)
 seqtab <- makeSequenceTable(dadaFs)
 
 cat("Dimensions of sequence table: \n")
