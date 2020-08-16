@@ -1,6 +1,5 @@
 # Input: seqtab (output/seqtab_nochim.rds)
-# Output: otus (output/STT2020_ASVs.txt), taxonomy (output/STT2020_taxonomy.txt), ASVseqs (output/STT2020_ASVsequences.txt)
-# Params: samples (SAMPLES)
+# Output: otus (output/ASVs.txt), taxonomy (output/taxonomy.txt), ASVseqs (output/ASVseqs.txt)
 
 sink(snakemake@log[[1]])
 
@@ -30,7 +29,10 @@ ASVseqs <- data.frame("asv" = paste0("ASV", seq(from = 1, to = dim(seqtab.nochim
 colnames(otus) <- ASVseqs$asv
 otus <- t(otus)
 rownames(taxonomy) <- ASVseqs$asv
-colnames(otus) <- snakemake@params[['samples']] #make sure that params are listed in the rule!
+
+#this needs to be changed if I ever do paired end
+samplenames <- gsub("_R1.fastq.gz","", unlist(dimnames(seqtab.nochim)[1]))
+colnames(otus) <- samplenames
 cat("Glance at taxonomy\n")
 head(taxonomy)
 cat("==========\n")

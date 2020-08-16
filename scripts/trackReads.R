@@ -3,12 +3,11 @@
 
 sink(snakemake@log[[1]])
 cat("Beginning output of tracking reads \n")
-library(dada2)
 
 load(file=snakemake@input[['outF']])
 cat("outF: \n")
 head(outF)
-load(file=snakemake@input[['dadaFs']])
+dadaFs <- readRDS(file=snakemake@input[['dadaFs']])
 cat("dadaFs: \n")
 head(dadaFs)
 load(file=snakemake@input[['seqtab_nochim']]) #note this object is names seqtab.nochim

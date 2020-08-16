@@ -1,19 +1,15 @@
 # Global configurations
 # This file contains all the parameters needed to update the workflow
 
-# the name for the analysis
-analysisname: "test"
 
 # the path to the data
-path: "/vortexfs1/scratch/lma/test"
-
-# file containing the sample names and paths for R1 and R2
-sampletable: "sampletable.csv"
+path: "/vortexfs1/scratch/lma/test/"
 
 # parameters for dada2::filterAndTrim
 
 trimLeft: 20
 truncLen: 125
+truncQ: 2
 maxN: 0
 maxEE: 1
 multithread: TRUE

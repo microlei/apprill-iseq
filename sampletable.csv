@@ -1,5 +1,0 @@
-﻿sample,R1,R1filtered,R2,R2filtered,Run
-STT_1,/vortexfs1/scratch/lma/test/1_S3_L001_R1_001.fastq.gz,/vortexfs1/scratch/lma/test/filtered/STT_1_R1.fastq.gz,/vortexfs1/scratch/lma/test/1_S3_L001_R2_001.fastq.gz,/vortexfs1/scratch/lma/test/filtered/STT_1_R2.fastq.gz,1
-STT_2,/vortexfs1/scratch/lma/test/2_S4_L001_R1_001.fastq.gz,/vortexfs1/scratch/lma/test/filtered/STT_2_R1.fastq.gz,/vortexfs1/scratch/lma/test/2_S4_L001_R2_001.fastq.gz,/vortexfs1/scratch/lma/test/filtered/STT_2_R2.fastq.gz,1
-FLA_349,/vortexfs1/scratch/lma/test/349_S39_L001_R1_001.fastq.gz,/vortexfs1/scratch/lma/test/filtered/FLA_349_R1.fastq.gz,/vortexfs1/scratch/lma/test/349_S39_L001_R2_001.fastq.gz,/vortexfs1/scratch/lma/test/filtered/FLA_349_R2.fastq.gz,2
-FLA_350,/vortexfs1/scratch/lma/test/350_S38_L001_R1_001.fastq.gz,/vortexfs1/scratch/lma/test/filtered/FLA_350_R1.fastq.gz,/vortexfs1/scratch/lma/test/350_S38_L001_R2_001.fastq.gz,/vortexfs1/scratch/lma/test/filtered/FLA_350_R2.fastq.gz,2

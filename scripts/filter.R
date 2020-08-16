@@ -8,9 +8,10 @@ cat("Beginning of output for filter.R \n")
 library(dada2) # load dada2
 
 outF <- filterAndTrim(fwd = snakemake@input[['R1']], filt = snakemake@output[['R1']],
-		rev = snakemake@input[['R2']], filt.rev = snakemake@output[['R2']],
+		# rev = snakemake@input[['R2']], filt.rev = snakemake@output[['R2']],
 		trimLeft = snakemake@config[['trimLeft']],
 		truncLen = snakemake@config[['truncLen']],
+		truncQ = snakemake@config[['truncQ']],
 		maxN = snakemake@config[['maxN']],
 		maxEE = snakemake@config[['maxEE']],
 		rm.phix = TRUE,

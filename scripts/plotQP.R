@@ -7,17 +7,9 @@
 library(dada2)
 library(ggplot2)
 
-path = dirname(snakemake@input[[1]])
-
-PQP <- function(x){
-	sample.name <- sapply(strsplit(basename(x), "_"), `[`, 1)
-	R1_R2 <- sapply(strsplit(basename(x),"_"), `[`, 4)
-	imagepath <- file.path(path, "qualityProfiles", R1_R2, paste(sample.name, R1_R2, "qual.jpg", sep="_"))
-	jpeg(file=imagepath)
-	print(imagepath)
-	p <- plotQualityProfile(x)
+for(i in 1:length(snakemake@input)){
+	jpeg(file=snakemake@output[[i]])
+	p <- plotQualityProfile(snakemake@input[[i]])
 	plot(p)
 	dev.off()
 }
-
-lapply(snakemake@input, PQP)

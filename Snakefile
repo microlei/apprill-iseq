@@ -1,16 +1,18 @@
-import os #this allows python to read file names and access other aspects of the operating system
-import pandas as pd #pandas is a python package that reads and writes data tables
-
 #configurations for running the code
 #Anything you would normally "hardcode" like paths, variables for the dada2 pipeline, etc go here
-configfile: "config/config.yaml" 
+configfile: "config.yaml" 
 
-#Reads in the sample table and gets list of sample names
-SampleTable = pd.read_table(config['sampletable'], index_col=0, sep=",")
-SAMPLES = list(SampleTable.index)
+#Gets sample names of forward reads
+WC = glob_wildcards(config['path']+"{run}/{names, ([A-Z]{3}_[^_]+)}{other}{dir, R1_001}.fastq.gz")
+#makes the sample names + run number in case of duplicate samples across runs
+SAMPLES = expand("{names}_{run}", zip, names=WC.names, run=WC.run)
+#if there are no duplicate names across runs, use this instead
+#SAMPLES = WC.names
+#paths to the fastq files, specifically the R1
+RAW = expand(config['path']+'{run}/{names}.fastq.gz', zip, run=WC.run, names=[i + j + k for i, j, k in zip(WC.names, WC.other, WC.dir)])
 
 #local rules marks a rule as local and does not need to be submitted as a job to the cluster
-localrules: all, all_profile, plotQP, trackReads, learnError
+localrules: all, plotQP, trackReads, learnError
 
 #this rule specifies all things you want generated
 rule all:
@@ -25,24 +27,26 @@ rule all:
 		"output/taxonomy.txt",
 		"output/ASVseqs.txt"
 
-#Not sure if this rule is necessary
-rule all_profile:
-	input: expand("output/figures/qualityProfiles/{direction}/{sample}_{direction}_qual.jpg", direction = ['R1','R2'], sample=SAMPLES)
+rule clean:
+    shell:
+        '''
+        rm output/*.rds
+        rm output/*.txt
+        rm output/*.csv
+        '''
 
 #plots quality profiles
 rule plotQP:
-	input: list(SampleTable.R1.values) + list(SampleTable.R2.values)
-	output: expand('output/figures/qualityProfiles/{direction}/{sample}_{direction}_qual.jpg',sample=SAMPLES, direction=["R1","R2"])
+	input: RAW
+	output: expand('output/figures/qualityProfiles/{direction}/{sample}_{direction}_qual.jpg',sample=SAMPLES, direction = 'R1')
 	script: 'scripts/plotQP.R'
 
 #quality filters R1 and R2 (forward and reverse reads)
 rule filter:
 	input:
-		R1 = SampleTable.R1.values,
-		R2 = SampleTable.R2.values
+		R1 = RAW
 	output:
-		R1 = expand(config['path']+"/filtered/{sample}_R1.fastq.gz", sample=SAMPLES), 
-		R2 = expand(config['path']+"/filtered/{sample}_R2.fastq.gz", sample=SAMPLES),
+		R1 = expand(config['path']+"filtered/{sample}_R1.fastq.gz", sample=SAMPLES), 
 		filtered = "output/filtered.rds"
 	params:
 		samples = SAMPLES
@@ -51,28 +55,13 @@ rule filter:
 	script:
 		"scripts/filter.R"
 
-# a function to return the paths to the R1 and R2 of each run
-# where the first index is R1 or R2 and the second index is which run
-
-def sampletable(df):
-	df2 = df.groupby('Run').apply(lambda x: x['R1filtered'].unique())
-	df3 = df.groupby('Run').apply(lambda x: x['R2filtered'].unique())
-	r1 = df2.values.tolist()
-	r2 = df3.values.tolist()
-	return r1,r2
-
 #error modeling and plotting the errors
 rule learnError:
 	input:
-		R1 = sampletable(SampleTable)[0],
-		R2 = sampletable(SampleTable)
-		#R1 = rules.filter.output.R1 #note you can declare the output of another rule as a dependency
+		R1 = rules.filter.output.R1 #note you can declare the output of another rule as a dependency
 	output:
-		errR1 = "output/debug.RData"
-		#errR1 = "output/errR1.RData",
-		#errR2 = temp("output/errR2.RData")
-		#plotErrR1 = "figures/errorRates_R1.pdf", #need to figure out how to save variable number of pdfs
-		#plotErrR2 = "figures/errorRates_R2.pdf"
+		errR1 = "output/errorRates_R1.rds",
+		plotErrR1 = "output/figures/errorRates_R1.pdf", #need to figure out how to save variable number of pdfs
 	log:
 		"logs/learnError.txt"
 	script:

@@ -8,14 +8,13 @@ library(dada2)
 library(ggplot2)
 
 #for specifying a set number of bases
-#errF <- learnErrors(snakemake@input[['R1']], nbases = snakemake@config[['nbases']], multithread=TRUE, randomize=TRUE)
+#errF <- learnErrors(snakemake@input[['R1']], nbases = 1e9, multithread=TRUE, randomize=TRUE, verbose=2)
 
 #for the default option
-#errF <- learnErrors(snakemake@input[['R1']],  multithread=TRUE, randomize=TRUE)
+errF <- learnErrors(snakemake@input[['R1']],  multithread=TRUE, randomize=TRUE, verbose=2)
 
-save.image(file=snakemake@output[[1]])
 
-#save(errF, file=snakemake@output[['errR1']])
+save(errF, file=snakemake@output[['errR1']])
 #save(errR, file=snakemake@output[['errR2']])
-# plotErrors(errF, nominalQ=TRUE)
-# ggsave(snakemake@output[['plotErrR1']])
+plotErrors(errF, nominalQ=TRUE)
+ggsave(snakemake@output[['plotErrR1']])

@@ -18,5 +18,5 @@ dim(seqtab)
 cat("Sequences are of length: \n")
 table(nchar(getSequences(seqtab)))
 
-save(seqtab, file=snakemake@output[['seqtab']])
-save(dadaFs, file=snakemake@output[['uniques']])
+saveRDS(seqtab, file=snakemake@output[['seqtab']])
+saveRDS(dadaFs, file=snakemake@output[['uniques']])
