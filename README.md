@@ -35,14 +35,21 @@ module load anaconda/5.1
 source activate snakemakedada #or whatever you named your environment
 ```
 
+Alternatively, use the environment.yml file to directly clone the environment I used to make this script
+```
+conda env create -f environment.yml
+conda env list
+```
+
 ## Step 1 make sure your files are in place
-By default, this workflow assumes your files are in your scratch project directory and that each sequencing run is under its own folder named Run# and each fastq.gz file named some 3 letter acronym_sample# (e.g. STT_1_junk_R1_001.fastq.gz). If this is not the case, you can edit the config file and the heading of the Snakefile to properly direct the workflow to your files. A helpful way to check your input values is to start python, load snakemake, and check what you're using for wildcards.
+By default, this workflow assumes your files are in your scratch project directory and that each sequencing run is under its own folder named Run# and each fastq.gz file named some 3 letter acronym_sample# (e.g. STT_1_junk_R1_001.fastq.gz). If this is not the case, you can **edit the config file and the heading of the Snakefile** to properly direct the workflow to your files. A helpful way to check your input values is to start python, load snakemake, and check what you're using for wildcards. 
 
 ```
 python
 from snakemake.io import *
 ##mess with wildcards here##
 ```
+If regular expressions are difficult, I like using a regex checker such as https://regexr.com/ with a representative list of my filenames to see what I'm doing in real time.
 
 ## Step 2 configure the workflow
 config.yaml: contains the global parameters that you may want to change, such as paths, dada2 function parameters and others. Some parameters you may edit after seeing results from running the makefile once, such as the trimming parameters after seeing the quality profiles
